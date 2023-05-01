@@ -3,7 +3,9 @@
 Dies ist das Repository zur Bearbeitung des Praktikums des Moduls SGD an der TH Köln im Sommersemester 2023
 
 ## Inhalt
-- [MS1](/src/main/ms1)
+- [MS1](./src/main/ms1)
+  - Projektkonzept als PDF
+  - SQL-Script mit Beispieldatensätzen
 
 ## Projektkonzept
 Im Ordner zum MS1 findet man das Projektkonzept auch zusätzlich als PDF-Datei
@@ -27,6 +29,15 @@ Im Ordner zum MS1 findet man das Projektkonzept auch zusätzlich als PDF-Datei
   - in einer Gruppe posten oder öffentlich
 - Post kommentieren
 - Gruppe erstellen
+
+#### ER-Diagramm
+![ER-Diagramm](./src/main/ms1/diagramme/er_diagramm.png "ER-Diagramm")
+
+#### Relationenmodell
+![Relationenmodell](./src/main/ms1/diagramme/relationenmodell.png "Relationenmodell")
+
+
+#### PL/SQL - Übersicht
 
 | Student | Prozedur / Funktion | Trigger   |
 | --- |---------------------|-----------|
