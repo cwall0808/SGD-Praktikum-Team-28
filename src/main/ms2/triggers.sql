@@ -50,34 +50,27 @@ BEGIN
     end if;
 END;
 
-/* popular posts defined by engagement (most comments),
-   right now it just prints all posts by friends that have at least 1 comment
-*/
-CREATE OR REPLACE PROCEDURE display_top_posts (user_id NUMBER)
-IS
-    comment_count number;
-    op_vorname varchar2(50);
-    op_nachname varchar2(50);
-    post_content varchar2(1000);
-
-    CURSOR c_posts IS SELECT p_id, titel, b_id, g_id FROM post
-        WHERE b_id IN (SELECT b1_id FROM befreundet_mit WHERE b2_id = user_id)
-        OR b_id IN (SELECT b2_id FROM befreundet_mit WHERE b1_id = user_id); -- only posts by friends
-BEGIN
-    dbms_output.put_line( '---------------');
-    dbms_output.put_line( 'Die jetzigen Top Posts: ');
-    FOR record in c_posts LOOP
-        SELECT count(*) INTO comment_count FROM kommentar WHERE record.p_id = kommentar.p_id;
-        IF comment_count >= 1 THEN
-            SELECT vorname INTO op_vorname FROM benutzer WHERE b_id = record.b_id;
-            SELECT nachname INTO op_nachname FROM benutzer WHERE b_id = record.b_id;
-            SELECT inhalt INTO post_content FROM text_post WHERE p_id = record.p_id; -- todo: differentiate between text / image posts
-            dbms_output.put_line( '---------------');
-            dbms_output.put_line( record.titel || ' von ' || op_vorname || ' ' || op_nachname);
-            dbms_output.put_line( post_content);
-        END IF;
-    END LOOP;
-END;
+/* doesn't fully work yet */
+-- CREATE OR REPLACE TRIGGER send_welcome_email
+-- AFTER INSERT ON BENUTZER
+-- FOR EACH ROW
+-- DECLARE
+--     smtp_connection UTL_SMTP.connection;
+--     domain VARCHAR2(50) := 'smtp.smail.thkoeln.de';
+--     from_email VARCHAR2(50) := 'junis.el-ahmad@smail.th-koeln.de';
+--     email_body VARCHAR2(500) := 'test';
+-- BEGIN
+--     smtp_connection := UTL_SMTP.open_connection(domain, 25);
+--     UTL_SMTP.helo(smtp_connection, domain);
+--     UTL_SMTP.mail(smtp_connection, from_email);
+--     UTL_SMTP.rcpt(smtp_connection, :NEW.e_mail);
+--
+--     UTL_SMTP.open_data(smtp_connection);
+--     UTL_SMTP.write_data(smtp_connection, email_body || UTL_TCP.crlf || UTL_TCP.crlf);
+--     UTL_SMTP.close_data(smtp_connection);
+--
+--     UTL_SMTP.quit(smtp_connection);
+-- END;
 
 BEGIN
     display_top_posts(3);
