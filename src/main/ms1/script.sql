@@ -102,3 +102,8 @@ INSERT INTO text_post (p_id, inhalt)
 VALUES (1, 'Heute habe ich neue Freunde kennengelernt. Alles nur Dank unserer SUPER Datenbank!! ^__^');
 
 INSERT INTO kommentar (k_id, b_id, p_id, inhalt) VALUES (1, 3, 1, 'Wow ich LIEBE diese Datenbank.');
+
+
+BEGIN
+    update_degree_groups();
+END;

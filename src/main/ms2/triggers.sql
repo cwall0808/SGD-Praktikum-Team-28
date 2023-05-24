@@ -1,0 +1,20 @@
+-- CREATE OR REPLACE TRIGGER send_welcome_email
+-- AFTER INSERT ON BENUTZER
+-- FOR EACH ROW
+-- DECLARE
+--     smtp_connection UTL_SMTP.connection;
+--     domain VARCHAR2(50) := 'smtp.smail.thkoeln.de';
+--     from_email VARCHAR2(50) := 'junis.el-ahmad@smail.th-koeln.de';
+--     email_body VARCHAR2(500) := 'test';
+-- BEGIN
+--     smtp_connection := UTL_SMTP.open_connection(domain, 25);
+--     UTL_SMTP.helo(smtp_connection, domain);
+--     UTL_SMTP.mail(smtp_connection, from_email);
+--     UTL_SMTP.rcpt(smtp_connection, :NEW.e_mail);
+--
+--     UTL_SMTP.open_data(smtp_connection);
+--     UTL_SMTP.write_data(smtp_connection, email_body || UTL_TCP.crlf || UTL_TCP.crlf);
+--     UTL_SMTP.close_data(smtp_connection);
+--
+--     UTL_SMTP.quit(smtp_connection);
+-- END;
