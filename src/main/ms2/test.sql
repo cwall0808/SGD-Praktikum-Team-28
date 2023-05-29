@@ -65,6 +65,31 @@ END;
 -- 4. Testfall rückgängig machen
 rollback;
 
+/* query_active_user TEST */
+-- 1. Ausgangslage
+-- Neuer Post von User 3 mit zwei Kommentaren (von User 1 und 2)
+INSERT INTO post (p_id, titel, b_id, g_id) VALUES (2, 'Testfall', 3, NULL);
+INSERT INTO text_post (p_id, inhalt)
+VALUES (2, 'Heute habe ich einen neuen Test geschrieben. Hoffentlich läuft alles gut.');
+INSERT INTO kommentar (k_id, b_id, p_id, inhalt) VALUES (2, 1, 2, 'Hallo User 3.');
+INSERT INTO kommentar (k_id, b_id, p_id, inhalt) VALUES (3, 2, 2, 'Ich wollte auch mal Teil des Tests sein.');
+-- 2. User 1 Loggt sich ein und sucht nach 'a' und bekommt User 2 und 3 angezeigt.
+BEGIN
+    query_active_user(1,'a');
+END;
+-- 3. Testfall rückgängig machen
+rollback;
+-- 5. Ausgangslange mit neuem Post von User 3 mit nur 1 Kommentar von User 1
+INSERT INTO post (p_id, titel, b_id, g_id) VALUES (2, 'Testfall', 3, NULL);
+INSERT INTO text_post (p_id, inhalt)
+VALUES (1, 'Heute habe ich einen neuen Test geschrieben. Hoffentlich läuft alles gut.');
+-- 6. User 1 loggt sich ein und sucht nach 'a' und bekommt nur User 3 angezeigt.
+BEGIN
+    query_active_user(1, 'a');
+END;
+-- 4. Testfall rückgängig machen
+rollback;
+
 /* update_degree_groups Prozedur TEST */
 -- 1. Ausgangslage, wenn Gruppe zu Studiengang bereits existiert
 INSERT INTO studiengang (s_id, name) VALUES (100, 'Philosophie');

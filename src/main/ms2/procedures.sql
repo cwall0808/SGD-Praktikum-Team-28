@@ -59,3 +59,44 @@ BEGIN
         END IF;
     END LOOP;
 END;
+
+/* user that match the query and are active
+    active means they already made a post or comment
+ */
+CREATE OR REPLACE PROCEDURE query_active_user (user_id NUMBER, query varchar2(50))
+    IS
+        query_matches boolean;
+        user_vorname varchar2(50);
+        user_nachname varchar2(50);
+        found_matches boolean;
+        CURSOR active_user IS SELECT b_id, nachname, vorname FROM BENUTZER
+            WHERE b_id IN (SELECT b_id FROM POST)
+            OR b_id IN (SELECT b_id FROM KOMMENTAR);
+BEGIN
+    found_matches := false;
+    dbms_output.put_line( '---------------');
+    dbms_output.put_line( 'Aktive User die auf deine Suche passen: ');
+    FOR user IN active_user LOOP
+        query_matches := false;
+        IF NOT user_id = user.B_ID THEN
+            IF instr(user.nachname, query) > 0 THEN
+                    query_matches := true;
+                    found_matches := true;
+                    user_vorname := user.VORNAME;
+                    user_nachname := user.NACHNAME;
+            ELSIF instr(user.vorname, query) > 0 THEN
+                    query_matches := true;
+                    found_matches := true;
+                    user_vorname := user.VORNAME;
+                    user_nachname := user.NACHNAME;
+            END IF;
+        END IF;
+
+        IF query_matches THEN
+                dbms_output.put_line(user_vorname || ' ' || user_nachname);
+        END IF;
+    END LOOP;
+    IF NOT found_matches THEN
+        dbms_output.put_line('Es wurden leider keine passenden, aktiven User gefunden.');
+    end if;
+END;
