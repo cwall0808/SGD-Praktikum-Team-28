@@ -81,13 +81,13 @@ INSERT INTO studiengang (s_id, name) VALUES (2, 'Mathematik');
 INSERT INTO studiengang (s_id, name) VALUES (3, 'Kunst');
 
 INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id) 
-VALUES (1, 'El Ahmad', 'Junis', 'Junis.El-Ahmad@webmail.th-koeln.de', 'Geheimnis123!!!', 1);
+VALUES (1, 'El Ahmad', 'Junis', 'Junis.El-Ahmad@smail.th-koeln.de', 'Geheimnis123!!!', 1);
 
 INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id) 
-VALUES (2, 'Wall', 'Carina', 'Carina.Wall@webmail.th-koeln.de', 'geheimNis321!!!', 2);
+VALUES (2, 'Wall', 'Carina', 'Carina.Wall@smail.th-koeln.de', 'geheimNis321!!!', 2);
 
 INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id) 
-VALUES (3, 'Zinn', 'Laura', 'Laura.Zinn@webmail.th-koeln.de', '!!!Geheimnis123', 3);
+VALUES (3, 'Zinn', 'Laura', 'Laura.Zinn@smail.th-koeln.de', '!!!Geheimnis123', 3);
 
 INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (1, 3);
 INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (2, 3);

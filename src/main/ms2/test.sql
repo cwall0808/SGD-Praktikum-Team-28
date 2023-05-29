@@ -14,6 +14,22 @@ SELECT passwort FROM benutzer WHERE b_id = 3;
 -- 4. Testfall rückgängig machen
 rollback;
 
+/* validate_email Trigger TEST */
+-- 1. Ausgangslage
+SELECT e_mail FROM benutzer WHERE b_id = 3;
+-- 2. Test mit fehlerhaften Fall
+UPDATE benutzer SET e_mail = 'laura.zinn@webmail.th-koeln.de' WHERE b_id = 3;
+-- 3. Kontrollanfrage, ob Test fehlgeschlagen ist
+SELECT e_mail FROM benutzer WHERE b_id = 3;
+-- 4. Testfall rückgängig machen
+rollback;
+-- 5. Test mit korrektem Fall
+UPDATE benutzer SET e_mail = 'Laura.Zinn@smail.th-koeln.de' WHERE b_id = 3;
+-- 6. Kontrollanfrage, ob Test geglückt ist
+SELECT e_mail FROM benutzer WHERE b_id = 3;
+-- 4. Testfall rückgängig machen
+rollback;
+
 /* display_top_posts TEST */
 -- 1. Ausgangslage
 -- Neuer Post von User 3 mit zwei Kommentaren (von User 1 und 2)

@@ -75,3 +75,46 @@ END;
 BEGIN
     display_top_posts(3);
 END;
+
+/* email requirements:
+   - domain "smail.th-koeln.de" required
+   - exactly 1 "@"
+   - allowed symbols: A-Z, a-z, 0-9, +, -
+*/
+CREATE OR REPLACE TRIGGER validate_email
+    BEFORE INSERT OR UPDATE OF e_mail ON Benutzer
+    FOR EACH ROW
+DECLARE
+    email_length number;
+    current_char varchar2(1);
+
+    email_domain varchar2(50);
+    at_the_rate_count number := 0;
+    only_allowed_symbols boolean := true;  
+BEGIN
+    email_length := LENGTH(:NEW.e_mail);
+
+    FOR i IN 1..email_length LOOP
+        current_char := SUBSTR(:NEW.e_mail, i, 1);
+        
+        IF(REGEXP_LIKE(current_char, '[$&+,:;=?#|''<>^*()%!]')) THEN /* is a special character */
+            only_allowed_symbols := false;
+            RAISE_APPLICATION_ERROR(-20111, 'Die Email-Adresse darf keine Sonderzeichen, außer . und - beinhalten.');
+        ELSIF(current_char = '@') THEN                /* is at the rate sign */
+            at_the_rate_count := at_the_rate_count + 1;
+            IF(at_the_rate_count > 1) THEN
+                RAISE_APPLICATION_ERROR(-20111, 'Die Email-Adresse darf nur einmal "@" enthalten.');
+            ELSE
+                email_domain := SUBSTR(:NEW.e_mail, i+1);
+                IF(NOT email_domain = 'smail.th-koeln.de') THEN
+                    RAISE_APPLICATION_ERROR(-20111, 'Die Domain der Email-Adresse muss "@smail.th-koeln.de" sein.');
+                END IF;  
+                EXIT;
+            END IF;    
+        END IF;
+    END LOOP;
+
+    IF(at_the_rate_count < 1) THEN
+        RAISE_APPLICATION_ERROR(-20111, 'Die Email muss genau einmal "@" enthalten um die Domain einzuleiten.');
+    END IF;
+END;
