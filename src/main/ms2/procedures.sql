@@ -7,6 +7,7 @@ IS
     op_vorname varchar2(50);
     op_nachname varchar2(50);
     post_content varchar2(1000);
+    found_posts boolean := false;
 
     CURSOR c_posts IS SELECT p_id, titel, b_id, g_id FROM post
         WHERE b_id IN (SELECT b1_id FROM befreundet_mit WHERE b2_id = user_id)
@@ -23,8 +24,13 @@ BEGIN
             dbms_output.put_line( '---------------');
             dbms_output.put_line( record.titel || ' von ' || op_vorname || ' ' || op_nachname);
             dbms_output.put_line( post_content);
+            found_posts := true;
         END IF;
     END LOOP;
+
+    IF NOT found_posts THEN
+        dbms_output.put_line( 'Momentan gibt es keine Top Posts!');
+    END IF;
 END;
 
 CREATE OR REPLACE PROCEDURE update_degree_groups
