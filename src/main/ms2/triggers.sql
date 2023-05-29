@@ -50,32 +50,6 @@ BEGIN
     end if;
 END;
 
-/* doesn't fully work yet */
--- CREATE OR REPLACE TRIGGER send_welcome_email
--- AFTER INSERT ON BENUTZER
--- FOR EACH ROW
--- DECLARE
---     smtp_connection UTL_SMTP.connection;
---     domain VARCHAR2(50) := 'smtp.smail.thkoeln.de';
---     from_email VARCHAR2(50) := 'junis.el-ahmad@smail.th-koeln.de';
---     email_body VARCHAR2(500) := 'test';
--- BEGIN
---     smtp_connection := UTL_SMTP.open_connection(domain, 25);
---     UTL_SMTP.helo(smtp_connection, domain);
---     UTL_SMTP.mail(smtp_connection, from_email);
---     UTL_SMTP.rcpt(smtp_connection, :NEW.e_mail);
---
---     UTL_SMTP.open_data(smtp_connection);
---     UTL_SMTP.write_data(smtp_connection, email_body || UTL_TCP.crlf || UTL_TCP.crlf);
---     UTL_SMTP.close_data(smtp_connection);
---
---     UTL_SMTP.quit(smtp_connection);
--- END;
-
-BEGIN
-    display_top_posts(3);
-END;
-
 /* email requirements:
    - domain "smail.th-koeln.de" required
    - exactly 1 "@"
@@ -118,3 +92,57 @@ BEGIN
         RAISE_APPLICATION_ERROR(-20111, 'Die Email muss genau einmal "@" enthalten um die Domain einzuleiten.');
     END IF;
 END;
+
+CREATE OR REPLACE TRIGGER recommend_friends
+FOR INSERT ON befreundet_mit
+COMPOUND TRIGGER
+    current_user_id befreundet_mit.b1_id%TYPE;
+    requested_friend_id befreundet_mit.b2_id%TYPE;
+
+    CURSOR recommended_friends IS
+    SELECT b1_id, b2_id, count(b2_id) FROM befreundet_mit
+    WHERE (b1_id = requested_friend_id OR b2_id = requested_friend_id)
+    AND (b1_id != current_user_id AND b2_id != current_user_id)
+    GROUP BY b1_id, b2_id
+    ORDER BY count(b2_id) DESC
+    FETCH FIRST 5 ROWS ONLY;
+
+    AFTER EACH ROW IS
+    BEGIN
+        current_user_id := :NEW.b1_id;
+        requested_friend_id := :NEW.b2_id;
+    END AFTER EACH ROW;
+
+    AFTER STATEMENT IS
+    BEGIN
+        DBMS_OUTPUT.put_line('More friends from user ' || requested_friend_id || ':');
+        FOR recommended_friend IN recommended_friends LOOP
+            IF recommended_friend.b1_id = requested_friend_id
+            THEN DBMS_OUTPUT.put_line(recommended_friend.b2_id);
+            ELSE DBMS_OUTPUT.put_line(recommended_friend.b1_id);
+            END IF;
+        END LOOP;
+    END AFTER STATEMENT;
+END recommend_friends;
+
+/* doesn't fully work yet */
+-- CREATE OR REPLACE TRIGGER send_welcome_email
+-- AFTER INSERT ON BENUTZER
+-- FOR EACH ROW
+-- DECLARE
+--     smtp_connection UTL_SMTP.connection;
+--     domain VARCHAR2(50) := 'smtp.intranet.fh-koeln.de';
+--     from_email VARCHAR2(50) := 'junis.el-ahmad@smail.th-koeln.de';
+--     email_body VARCHAR2(500) := 'test';
+-- BEGIN
+--     smtp_connection := UTL_SMTP.open_connection(domain, 25);
+--     UTL_SMTP.helo(smtp_connection, domain);
+--     UTL_SMTP.mail(smtp_connection, from_email);
+--     UTL_SMTP.rcpt(smtp_connection, :NEW.e_mail);
+--
+--     UTL_SMTP.open_data(smtp_connection);
+--     UTL_SMTP.write_data(smtp_connection, email_body || UTL_TCP.crlf || UTL_TCP.crlf);
+--     UTL_SMTP.close_data(smtp_connection);
+--
+--     UTL_SMTP.quit(smtp_connection);
+-- END;

@@ -64,3 +64,54 @@ BEGIN
 END;
 -- 4. Testfall rückgängig machen
 rollback;
+
+/* update_degree_groups Prozedur TEST */
+-- 1. Ausgangslage, wenn Gruppe zu Studiengang bereits existiert
+INSERT INTO studiengang (s_id, name) VALUES (100, 'Philosophie');
+INSERT INTO gruppe (g_id, name) VALUES (150, 'Philosophie');
+-- 2. Test, dass keine zweite Gruppe zum Studiengang erstellt wurde
+SELECT count(name) FROM gruppe WHERE name = 'Philosophie';
+
+BEGIN
+    update_degree_groups();
+END;
+
+SELECT count(name) FROM gruppe WHERE name = 'Philosophie';
+-- 3. Testfall rückgängig machen
+rollback;
+-- 4. Ausgangslage, wenn KEINE Gruppe zu Studiengang existiert
+INSERT INTO studiengang (s_id, name) VALUES (100, 'Philosophie');
+-- 5. Test, dass eine neue Gruppe zu Studiengang erstellt wurde
+SELECT count(name) FROM gruppe WHERE name = 'Philosophie';
+
+BEGIN
+    update_degree_groups();
+END;
+
+SELECT count(name) FROM gruppe WHERE name = 'Philosophie';
+-- 6. Testfall rückgängig machen
+rollback;
+
+/* recommend_friends Trigger TEST */
+-- 1. Ausgangslage der Benutzer
+INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id)
+VALUES (100, 'Lama', 'Anna', 'anna@webmail.th-koeln.de', 'Passwort12!!!<3', 1);
+INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id)
+VALUES (101, 'Blob', 'Bob', 'bob@webmail.th-koeln.de', 'Passwort12!!!<3', 1);
+INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id)
+VALUES (102, 'Gasolin', 'Carolin', 'caroline@webmail.th-koeln.de', 'Passwort12!!!<3', 1);
+INSERT INTO benutzer (b_id, nachname, vorname, e_mail, passwort, s_id)
+VALUES (103, 'Bambina', 'Dina', 'dina@webmail.th-koeln.de', 'Passwort12!!!<3', 1);
+-- 2. Ausgangslage von befreundet_mit
+INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (100, 103);
+INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (101, 102);
+INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (101, 103);
+INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (103, 102);
+-- 3. Test, wenn Nutzer 100 Freundesanfrage an Nutzer 101 sendet
+-- (sortiert nach meisten Freundesanfragen)
+INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (100, 101);
+-- 4. Test, wenn Nutzer 101 Freundesanfrage an Nutzer 100 sendet
+-- (hierbei soll Nutzer 101 sich nicht selbst vorgeschlagen werden)
+INSERT INTO befreundet_mit (b1_id, b2_id) VALUES (101, 100);
+-- 5. Testfälle rückgängig machen
+rollback;

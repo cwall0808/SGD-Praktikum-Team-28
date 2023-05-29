@@ -105,8 +105,4 @@ INSERT INTO kommentar (k_id, b_id, p_id, inhalt) VALUES (1, 3, 1, 'Wow ich LIEBE
 
 UPDATE benutzer SET passwort = 'PASSWORt123%%$3123' WHERE b_id = 3;
 
-BEGIN
-    update_degree_groups();
-END;
-
 commit;
