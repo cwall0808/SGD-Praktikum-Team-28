@@ -14,8 +14,6 @@ Dies ist das Repository zur Bearbeitung des Praktikums des Moduls SGD an der TH 
 ## Projektkonzept
 Im Ordner zum MS1 findet man das Projektkonzept auch zusätzlich als PDF-Datei
 
-(*! PDF ist noch nicht aktualisiert !*)
-
 ### Teamvorstellung
 - Carina Wall (inf2506) - Teamleiter
 - Junis El Ahmad (inf2397)
@@ -51,7 +49,6 @@ Kommilitonen kommentiert werden.
 ![ER-Diagramm](./src/main/ms1/diagramme/er_diagramm.png "ER-Diagramm")
 
 #### Relationenmodell
-(*! Der Pfeil von befreundet_mit zu Benutzer fehlt und wird noch ergänzt !*)
 ![Relationenmodell](./src/main/ms1/diagramme/relationenmodell.png "Relationenmodell")
 
 
