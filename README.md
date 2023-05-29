@@ -14,8 +14,6 @@ Dies ist das Repository zur Bearbeitung des Praktikums des Moduls SGD an der TH 
 ## Projektkonzept
 Im Ordner zum MS1 findet man das Projektkonzept auch zusätzlich als PDF-Datei
 
-(*! PDF ist noch nicht aktualisiert !*)
-
 ### Teamvorstellung
 - Carina Wall (inf2506) - Teamleiter
 - Junis El Ahmad (inf2397)
@@ -51,7 +49,6 @@ Kommilitonen kommentiert werden.
 ![ER-Diagramm](./src/main/ms1/diagramme/er_diagramm.png "ER-Diagramm")
 
 #### Relationenmodell
-(*! Der Pfeil von befreundet_mit zu Benutzer fehlt und wird noch ergänzt !*)
 ![Relationenmodell](./src/main/ms1/diagramme/relationenmodell.png "Relationenmodell")
 
 
@@ -76,10 +73,11 @@ Kommilitonen kommentiert werden.
 
 3. **Benutzer suchen / filtern**
 
-    Es gibt die Möglichkeit die Benutzer mit Hilfe des Namens zu suchen. Zusätzlich kann man Benutzer aber auch nach dem
-    Studiengang filtern oder danach, ob man mit ihm in einer Gruppe ist. Des Weiteren werden die Benutzer danach
-   gefiltert ob sie noch aktiv sind. Dabei wird geschaut ob der Benutzer innerhalb eines Jahres entweder einen Post
+    Es gibt die Möglichkeit die Benutzer mit Hilfe des Namens zu suchen. Des Weiteren werden die Benutzer danach
+   gefiltert ob sie noch aktiv sind. Dabei wird geschaut ob der Benutzer schon entweder einen Post
    verfasst oder einen kommentiert hat.
+
+    
 
 #### Trigger
 1. **Bei Erstellen eines Accounts testen, ob die E-Mail korrekt ist**
