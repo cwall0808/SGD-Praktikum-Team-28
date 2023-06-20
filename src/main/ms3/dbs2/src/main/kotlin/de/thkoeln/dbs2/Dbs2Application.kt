@@ -4,7 +4,9 @@ import de.thkoeln.dbs2.model.Benutzer
 import de.thkoeln.dbs2.model.Studiengang
 import de.thkoeln.dbs2.repository.BenutzerRepository
 import de.thkoeln.dbs2.repository.StudiengangRepository
-import org.antlr.v4.runtime.tree.xpath.XPath.findAll
+import de.thkoeln.dbs2.model.Kommentar
+import de.thkoeln.dbs2.model.TextPost
+import de.thkoeln.dbs2.repository.CommentRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -14,19 +16,17 @@ import org.springframework.jdbc.core.JdbcTemplate
 
 @SpringBootApplication
 class Dbs2Application : CommandLineRunner {
+	@Suppress("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
 	val jdbcTemplate: JdbcTemplate? = null
 	@Autowired
 	lateinit var userRepository: BenutzerRepository
 	@Autowired
 	lateinit var degreeRepository: StudiengangRepository
+	@Autowired
+	lateinit var commentRepository: CommentRepository
 
-	companion object {
-		@JvmStatic
-		fun main(args: Array<String>) {
-			runApplication<Dbs2Application>(*args)
-		}
-	}
+	lateinit var currentUser: Benutzer
 
 	@Throws(Exception::class)
 	override fun run(vararg args: String?) {
@@ -51,17 +51,17 @@ class Dbs2Application : CommandLineRunner {
 			when(readln()){
 				"1" -> {
 					displayLoginScreen()
-					return
 				}
 				"2" -> {
 					displayRegistrationScreen()
-					return
 				}
-				"3" -> {
-					return
+				"3" -> {}
+				else -> {
+					println("Dies ist keine gültige Eingabe. Bitte antworte entweder mit '1', '2' oder '3'.")
+					continue
 				}
-				else -> println("Dies ist keine gültige Eingabe. Bitte antworte entweder mit '1', '2' oder '3'.")
 			}
+			return
 		}
 	}
 
@@ -84,9 +84,25 @@ class Dbs2Application : CommandLineRunner {
 				BeanPropertyRowMapper.newInstance(Benutzer::class.java)
 			)
 		if (users.isNotEmpty()) {
-			println("\nWillkommen, ${users.first().vorname}!\n")
+			currentUser = users.first()
+			println("\nWillkommen, ${currentUser.vorname}!")
+			displayMainScreen()
 		} else {
 			displayFailedLoginScreen()
+		}
+	}
+
+	fun displayMainScreen() {
+		while(true){
+			println("\nSuche eine Option aus.\n")
+			println("1.『 Posts anzeigen 』")
+			println("2.『 Programm beenden 』")
+
+			when(readln()){
+				"1" -> displayTextPostsScreen()
+				"2" -> return
+				else -> println("\nDies ist keine gültige Eingabe. Bitte antworte entweder mit '1' oder '2'")
+			}
 		}
 	}
 
@@ -99,14 +115,16 @@ class Dbs2Application : CommandLineRunner {
 			when(readln()){
 				"1" -> {
 					displayLoginScreen()
-					return
 				}
 				"2" -> {
 					displayWelcomeScreen()
-					return
 				}
-				else -> println("\nDies ist keine gültige Eingabe. Bitte antworte entweder mit '1' oder '2'")
+				else -> {
+					println("\nDies ist keine gültige Eingabe. Bitte antworte entweder mit '1' oder '2'")
+					continue
+				}
 			}
+			return
 		}
 	}
 
@@ -151,5 +169,68 @@ class Dbs2Application : CommandLineRunner {
 		displayLoginScreen()
 	}
 
+	fun displayTextPostsScreen() {
+		val textPosts = printTextPosts()
+
+		while (true) {
+			println("\nSuche einen Post zum Kommentieren aus (n = Hauptbildschirm).")
+
+			when (val input = readln()) {
+				"n" -> {}
+				else -> {
+					val postIndex = input.toIntOrNull()
+
+					if (postIndex == null || postIndex - 1 !in textPosts.indices) {
+						println("\nDies ist keine gültige Eingabe.")
+						continue
+					}
+
+					displayCommentScreen(textPosts[postIndex - 1].p_id)
+				}
+			}
+			return
+		}
+	}
+
+	fun printTextPosts(): List<TextPost> {
+		val postQuery = "SELECT * FROM Text_Post"
+
+		val textPosts: List<TextPost> = jdbcTemplate!!.query(
+			postQuery,
+			BeanPropertyRowMapper.newInstance(TextPost::class.java)
+		)
+
+		textPosts.forEachIndexed { index, textPost ->
+			val comments: List<Kommentar> = commentRepository.findAll().filter {
+				it.p_id == textPost.p_id
+			}
+
+			println("\n${index + 1}. Post: '${textPost.inhalt}'")
+			println("Kommentare:")
+			comments.forEach { println("'${it.inhalt}'")}
+		}
+
+		return textPosts
+	}
+
+	fun displayCommentScreen(postId: Int) {
+		println("\nSchreibe deinen Kommentar:")
+		val comment = readln()
+
+		commentOnPost(comment, postId)
+		println("\nKommentar hochgeladen!")
+	}
+
+	fun commentOnPost(contentText: String, postId: Int) {
+		val comment = Kommentar(currentUser.b_id, postId, contentText)
+		commentRepository.save(comment)
+	}
+
+	companion object {
+		@JvmStatic
+		fun main(args: Array<String>) {
+			runApplication<Dbs2Application>(*args)
+		}
+	}
 }
 

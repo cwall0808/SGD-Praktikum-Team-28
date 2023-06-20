@@ -81,7 +81,7 @@ INSERT INTO studiengang (name) VALUES ('Mathematik');
 INSERT INTO studiengang (name) VALUES ('Kunst');
 
 INSERT INTO benutzer (nachname, vorname, e_mail, passwort, s_id)
-VALUES ('El Ahmad', 'Junis', 'Junis.El-Ahmad@smail.th-koeln.de', 'Geheimnis123!!!', 1);
+VALUES ('El Ahmad', 'Junis', 'Junis.El_Ahmad@smail.th-koeln.de', 'Geheimnis123!!!', 1);
 
 INSERT INTO benutzer (nachname, vorname, e_mail, passwort, s_id)
 VALUES ('Wall', 'Carina', 'Carina.Wall@smail.th-koeln.de', 'geheimNis321!!!', 2);
