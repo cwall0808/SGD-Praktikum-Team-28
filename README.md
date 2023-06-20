@@ -10,6 +10,8 @@ Dies ist das Repository zur Bearbeitung des Praktikums des Moduls SGD an der TH 
   - SQL-Script mit Prozeduren
   - SQL-Script mit Triggern
   - SQL-Script mit Tests
+- [MS3](./src/main/ms3)
+  - Applikation in Kotlin
 
 ## Projektkonzept
 Im Ordner zum MS1 findet man das Projektkonzept auch zusätzlich als PDF-Datei
@@ -99,3 +101,14 @@ Kommilitonen kommentiert werden.
     Nutzer Freundesempfehlungen bekommen. Hierbei sollen Nutzer vorgeschlagen werden,
     welche bereits mit dem zweiten Nutzer befreundet sind. Die empfohlenen Freunde
     sollen nach Popularität (Anzahl von Freundesanfragen) sortiert werden.
+
+## Applikation
+
+Die Applikation ist eine Konsolen-Anwendung und in der Programmiersprache Kotlin umgesetzt.
+
+Zunächst wird einem die Möglichkeit gegeben sich einzuloggen oder zu registrieren. Beim Registrieren werden die Trigger
+für die Passwort- sowie Email-Validierung genutzt.
+
+Ist man eingeloggt kann man sich alle Text-Posts mit den dazugehörigen Kommentaren ausgeben lassen und diese 
+ebenfalls kommentieren. Des Weiteren kann man nach einem aktiven Benutzer suchen und sich Informationen zu ihm ausgeben
+lassen.
