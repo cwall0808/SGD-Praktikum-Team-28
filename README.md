@@ -14,8 +14,6 @@ Dies ist das Repository zur Bearbeitung des Praktikums des Moduls SGD an der TH 
 ## Projektkonzept
 Im Ordner zum MS1 findet man das Projektkonzept auch zusätzlich als PDF-Datei
 
-(*! PDF ist noch nicht aktualisiert !*)
-
 ### Teamvorstellung
 - Carina Wall (inf2506) - Teamleiter
 - Junis El Ahmad (inf2397)
@@ -51,7 +49,6 @@ Kommilitonen kommentiert werden.
 ![ER-Diagramm](./src/main/ms1/diagramme/er_diagramm.png "ER-Diagramm")
 
 #### Relationenmodell
-(*! Der Pfeil von befreundet_mit zu Benutzer fehlt und wird noch ergänzt !*)
 ![Relationenmodell](./src/main/ms1/diagramme/relationenmodell.png "Relationenmodell")
 
 
@@ -64,11 +61,10 @@ Kommilitonen kommentiert werden.
 | Laura Zinn | (2)                 | (2)     |
 
 #### Prozeduren / Funktionen
-1. **Automatische Erstellung und Hinzufügen von Gruppen für einzelne Studiengänge**
+1. **Automatische Erstellung von Gruppen für einzelne Studiengänge**
 
-    Mit Hilfe des Studiengangs eines Benutzers sollen automatisch Gruppen für die verschiedenen Studiengänge
-    erstellt und die dazugehörigen Benutzer hinzugefügt werden
-
+    Wird ein Studiengang erstellt, soll auch automatisch eine Gruppe für diesen
+    erstellt werden, es sei denn, es existiert bereits eine solche Gruppe.
 
 2. **Top-Posts anzeigen**
 
@@ -77,10 +73,11 @@ Kommilitonen kommentiert werden.
 
 3. **Benutzer suchen / filtern**
 
-    Es gibt die Möglichkeit die Benutzer mit Hilfe des Namens zu suchen. Zusätzlich kann man Benutzer aber auch nach dem
-    Studiengang filtern oder danach, ob man mit ihm in einer Gruppe ist. Des Weiteren werden die Benutzer danach
-   gefiltert ob sie noch aktiv sind. Dabei wird geschaut ob der Benutzer innerhalb eines Jahres entweder einen Post
+    Es gibt die Möglichkeit die Benutzer mit Hilfe des Namens zu suchen. Des Weiteren werden die Benutzer danach
+   gefiltert ob sie noch aktiv sind. Dabei wird geschaut ob der Benutzer schon entweder einen Post
    verfasst oder einen kommentiert hat.
+
+    
 
 #### Trigger
 1. **Bei Erstellen eines Accounts testen, ob die E-Mail korrekt ist**
@@ -96,7 +93,9 @@ Kommilitonen kommentiert werden.
 1 Klein-, sowie min. 1 Großbuchstaben, min. 1 Zahl und min. 3 Sonderzeichen.
 
 
-3. **Bei Erstellen eines Accounts eine Willkommens-Message senden**
+3. **Nach dem Senden einer Freundesanfrage weitere Nutzer empfehlen**
     
-    Beim Erstellen eines Accounts wird eine E-Mail an die hinterlegte TH-Email-Adresse mit einer kleinen 
-Willkommensnachricht gesendet
+    Sendet ein Nutzer einem zweiten Nutzer eine Freundesanfrage, soll der erste
+    Nutzer Freundesempfehlungen bekommen. Hierbei sollen Nutzer vorgeschlagen werden,
+    welche bereits mit dem zweiten Nutzer befreundet sind. Die empfohlenen Freunde
+    sollen nach Popularität (Anzahl von Freundesanfragen) sortiert werden.
