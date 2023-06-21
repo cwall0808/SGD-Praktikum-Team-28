@@ -98,12 +98,14 @@ class Dbs2Application : CommandLineRunner {
 			println("\nSuche eine Option aus.\n")
 			println("1.『 Posts anzeigen 』")
 			println("2.『 Nutzer suchen 』")
-			println("3.『 Programm beenden 』")
+			println("3.『 Studiengang hinzufuegen 』")
+			println("4.『 Programm beenden 』")
 
 			when(readln()){
 				"1" -> displayTextPostsScreen()
 				"2" -> displaySearchUserScreen()
-				"3" -> return
+				"3" -> displayAddDegreeScreen()
+				"4" -> return
 				else -> println("\nDies ist keine gültige Eingabe. Bitte antworte entweder mit '1' oder '2'")
 			}
 		}
@@ -237,9 +239,25 @@ class Dbs2Application : CommandLineRunner {
 				"n" -> {}
 				else -> {
 					userRepository.queryActiveUser(currentUser.b_id, input)
-					//TODO: print output in command line
 				}
 			}
+			return
+		}
+	}
+
+	fun displayAddDegreeScreen() {
+		while (true) {
+			println("\nGib den Namen des Studiengangs ein (n = Hauptbildschirm).")
+
+			when (val input = readln()) {
+				"n" -> {}
+				else -> {
+					degreeRepository.save(Studiengang(input))
+					degreeRepository.updateDegreeGroups()
+					println("Studiengang und zugehoerige Gruppe erstellt!")
+				}
+			}
+			return
 		}
 	}
 
