@@ -104,11 +104,22 @@ Kommilitonen kommentiert werden.
 
 ## Applikation
 
-Die Applikation ist eine Konsolen-Anwendung und in der Programmiersprache Kotlin umgesetzt.
+#### Technologien
+
+Die Applikation ist eine Konsolen-Anwendung und in der Programmiersprache Kotlin geschrieben. Der Verbindungsaufbau
+zwischen der Applikation und der Datenbank wird mit Spring Boot umgesetzt. 
+
+In der Applikation werden teilweise direkt Queries auf der Datenbank ausgeführt, 
+aber auch mithilfe von Crud-Repositories, welche automatisch Queries erstellen können.
+Um in der Applikation die Daten der einzelnen Tabellen zu verwalten, werden Datenklassen von Kotlin benutzt.
+
+#### Nutzerablauf
 
 Zunächst wird einem die Möglichkeit gegeben sich einzuloggen oder zu registrieren. Beim Registrieren werden die Trigger
-für die Passwort- sowie Email-Validierung genutzt.
+für die Passwort- sowie Email-Validierung ausgelöst.
 
-Ist man eingeloggt kann man sich alle Text-Posts mit den dazugehörigen Kommentaren ausgeben lassen und diese 
-ebenfalls kommentieren. Des Weiteren kann man nach einem aktiven Benutzer suchen und sich Informationen zu ihm ausgeben
+Ist man eingeloggt kann man sich alle Text-Posts mit den dazugehörigen Kommentaren ausgeben lassen.
+Daraufhin gibt es die Möglichkeit, einen bestimmten Post zu kommentieren.
+
+Des Weiteren kann man nach einem aktiven Benutzer suchen und sich Informationen zu ihm ausgeben
 lassen.
