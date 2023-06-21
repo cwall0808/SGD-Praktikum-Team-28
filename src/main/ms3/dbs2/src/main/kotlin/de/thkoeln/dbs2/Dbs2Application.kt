@@ -1,18 +1,19 @@
 package de.thkoeln.dbs2
 
 import de.thkoeln.dbs2.model.Benutzer
-import de.thkoeln.dbs2.model.Studiengang
-import de.thkoeln.dbs2.repository.BenutzerRepository
-import de.thkoeln.dbs2.repository.StudiengangRepository
 import de.thkoeln.dbs2.model.Kommentar
+import de.thkoeln.dbs2.model.Studiengang
 import de.thkoeln.dbs2.model.TextPost
+import de.thkoeln.dbs2.repository.BenutzerRepository
 import de.thkoeln.dbs2.repository.CommentRepository
+import de.thkoeln.dbs2.repository.StudiengangRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.jdbc.core.BeanPropertyRowMapper
 import org.springframework.jdbc.core.JdbcTemplate
+
 
 @SpringBootApplication
 class Dbs2Application : CommandLineRunner {
@@ -96,11 +97,13 @@ class Dbs2Application : CommandLineRunner {
 		while(true){
 			println("\nSuche eine Option aus.\n")
 			println("1.『 Posts anzeigen 』")
-			println("2.『 Programm beenden 』")
+			println("2.『 Nutzer suchen 』")
+			println("3.『 Programm beenden 』")
 
 			when(readln()){
 				"1" -> displayTextPostsScreen()
-				"2" -> return
+				"2" -> displaySearchUserScreen()
+				"3" -> return
 				else -> println("\nDies ist keine gültige Eingabe. Bitte antworte entweder mit '1' oder '2'")
 			}
 		}
@@ -224,6 +227,20 @@ class Dbs2Application : CommandLineRunner {
 	fun commentOnPost(contentText: String, postId: Int) {
 		val comment = Kommentar(currentUser.b_id, postId, contentText)
 		commentRepository.save(comment)
+	}
+
+	fun displaySearchUserScreen() {
+		while (true) {
+			println("\nGib den Vor- oder Nachnamen der Person ein die du suchst (n = Hauptbildschirm).")
+
+			when (val input = readln()) {
+				"n" -> {}
+				else -> {
+					userRepository.queryActiveUser(currentUser.b_id, input)
+					//TODO: print output in command line
+				}
+			}
+		}
 	}
 
 	companion object {

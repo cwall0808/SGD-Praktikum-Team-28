@@ -63,7 +63,7 @@ END;
 /* user that match the query and are active
     active means they already made a post or comment
  */
-CREATE OR REPLACE PROCEDURE query_active_user (user_id NUMBER, query varchar2(50))
+CREATE OR REPLACE PROCEDURE query_active_user (user_id NUMBER, query VARCHAR2)
     IS
         query_matches boolean;
         user_vorname varchar2(50);
