@@ -78,12 +78,31 @@ class Dbs2Application : CommandLineRunner {
 	}
 
 	fun login(email: String, pw: String){
-		val sql = "SELECT * FROM Benutzer WHERE e_mail = '$email' AND passwort = '$pw'" // todo: deny sql injections
 		val users: List<Benutzer> =
-			jdbcTemplate!!.query(
-				sql,
-				BeanPropertyRowMapper.newInstance(Benutzer::class.java)
-			)
+			jdbcTemplate!!.query({ connection ->
+				connection.prepareStatement("SELECT * FROM Benutzer WHERE e_mail = ? AND passwort = ?")
+			},
+				{
+					preparedStatement ->
+					run {
+						preparedStatement.setString(1, email)
+						preparedStatement.setString(2, pw)
+					}
+				}
+			) { rs ->
+				val userList = mutableListOf<Benutzer>()
+				while (rs.next()) {
+					userList.add(
+						Benutzer(rs.getString(3),
+								 rs.getString(2),
+								 rs.getString(6),
+								 rs.getString(7),
+								 rs.getInt(8)))
+					userList.last().b_id = rs.getInt(1)
+				}
+				rs.close()
+				return@query userList
+			} as List<Benutzer>
 		if (users.isNotEmpty()) {
 			currentUser = users.first()
 			println("\nWillkommen, ${currentUser.vorname}!")
